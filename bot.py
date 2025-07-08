@@ -139,7 +139,8 @@ async def set_voice(ctx, voice_name: str):
     # 허용된 음성 목록
     allowed_voices = [
         "ko-KR-Wavenet-A", "ko-KR-Wavenet-B", "ko-KR-Wavenet-C", "ko-KR-Wavenet-D",
-        "ko-KR-Standard-A", "ko-KR-Standard-B", "ko-KR-Standard-C", "ko-KR-Standard-D"
+        "ko-KR-Standard-A", "ko-KR-Standard-B", "ko-KR-Standard-C", "ko-KR-Standard-D",
+        "ko-KR-Chirp3-HD-Leda"
     ]
     
     if voice_name in allowed_voices:
