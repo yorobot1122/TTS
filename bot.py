@@ -63,9 +63,11 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    # 특정 채널의 메시지를 큐에 추가
+    # 특정 채널의 메시지를 큐에 추가 (봇 메시지 제외)
     if message.channel.id == monitoring_channel_id and not message.author.bot:
-        await message_queue.put(message.content)
+        # 명령어가 아닌 일반 메시지만 처리
+        if not message.content.startswith('!'):
+            await message_queue.put(message.content)
     
     # 명령어 처리
     await bot.process_commands(message)
@@ -122,6 +124,7 @@ async def tts_player():
                 os.remove(output_file)
         
         voice_client.play(source, after=after_playing)
+        print(f"TTS 재생: {text}")
         
     except Exception as e:
         print(f"TTS 재생 오류: {e}")
@@ -145,9 +148,10 @@ async def set_voice(ctx, voice_name: str):
     else:
         await ctx.send(f"❌ 허용되지 않은 음성입니다. 다음 중 하나를 선택해주세요:\n{', '.join(allowed_voices)}")
 
-@bot.command(name='tts')
-async def tts_command(ctx, *, text: str):
-    """텍스트를 음성으로 변환하여 재생"""
+# !tts 대신 ! 명령어로 변경 (모든 사용자 사용 가능)
+@bot.command(name='!')
+async def tts_shortcut(ctx, *, text: str):
+    """텍스트를 음성으로 변환하여 재생 (모든 사용자 사용 가능)"""
     # 음성 채널 확인
     if not ctx.author.voice:
         await ctx.send("먼저 음성 채널에 접속해주세요!")
